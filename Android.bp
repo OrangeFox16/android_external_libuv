@@ -1,0 +1,97 @@
+package {
+    default_applicable_licenses: ["external_libuv_license"],
+}
+
+license {
+    name: "external_libuv_license",
+    visibility: [":__subpackages__"],
+    license_kinds: ["SPDX-license-identifier-MIT"],
+    license_text: ["LICENSE"],
+}
+
+cc_library_headers {
+    name: "libuv_headers",
+    host_supported: true,
+    recovery_available: true,
+    vendor_available: true,
+    export_include_dirs: ["include"],
+}
+
+cc_library_static {
+    name: "libuv",
+
+    recovery_available: true,
+    vendor_available: true,
+
+    srcs: [
+        // Common libuv sources.
+        "src/fs-poll.c",
+        "src/idna.c",
+        "src/inet.c",
+        "src/random.c",
+        "src/strscpy.c",
+        "src/strtok.c",
+        "src/thread-common.c",
+        "src/threadpool.c",
+        "src/timer.c",
+        "src/uv-common.c",
+        "src/uv-data-getter-setters.c",
+        "src/version.c",
+
+        // Common Unix sources.
+        "src/unix/async.c",
+        "src/unix/core.c",
+        "src/unix/dl.c",
+        "src/unix/fs.c",
+        "src/unix/getaddrinfo.c",
+        "src/unix/getnameinfo.c",
+        "src/unix/loop-watcher.c",
+        "src/unix/loop.c",
+        "src/unix/pipe.c",
+        "src/unix/poll.c",
+        "src/unix/process.c",
+        "src/unix/random-devurandom.c",
+        "src/unix/signal.c",
+        "src/unix/stream.c",
+        "src/unix/tcp.c",
+        "src/unix/thread.c",
+        "src/unix/tty.c",
+        "src/unix/udp.c",
+
+        // Linux / Android sources.
+        "src/unix/linux.c",
+        "src/unix/procfs-exepath.c",
+        "src/unix/proctitle.c",
+        "src/unix/random-getrandom.c",
+        "src/unix/random-sysctl-linux.c",
+    ],
+
+    local_include_dirs: [
+        "src",
+        "src/unix",
+    ],
+
+    header_libs: [
+        "libuv_headers",
+    ],
+
+    export_header_lib_headers: [
+        "libuv_headers",
+    ],
+
+    cflags: [
+        "-D_GNU_SOURCE",
+        "-D_LARGEFILE_SOURCE",
+        "-D_FILE_OFFSET_BITS=64",
+        "-DANDROID",
+        "-Wno-unused-parameter",
+        "-Wno-sign-compare",
+        "-Wno-missing-field-initializers",
+        "-Wno-unused-function",
+        "-Wno-unused-variable",
+        "-Wno-unused-but-set-variable",
+        "-Wno-format",
+    ],
+
+    stl: "none",
+}
